@@ -1,0 +1,98 @@
+---
+{
+"urlFormat": "index.html"
+}
+---
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{{name}}</title>
+    <meta name="description" content={{richTextDescription}}>
+    {{>head}}
+    {{>schema-product}}
+    <link href="https://fonts.googleapis.com/css?family=Work+Sans:200,400&display=swap" rel="stylesheet">
+    {{!--
+    <link rel="stylesheet" href="../src/style.css"> --}}
+    <script src="./TW-ELEMENTS-PATH/dist/js/index.min.js"></script>
+    <script src="https://assets.sitescdn.net/answers/v1/answerstemplates.compiled.min.js"></script>
+    <script src="https://assets.sitescdn.net/answers/v1/answers.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    {{!--
+    <link rel="stylesheet" type="text/css" href="https://assets.sitescdn.net/answers/v1/answers.css" /> --}}
+    <link rel="stylesheet" href="../src/global.css">
+
+    <script>
+        function formatDirectAnswer(fieldName, fieldType, value) {
+            if (fieldType == "phone") {
+                return value
+
+            }
+            return value;
+        }
+    </script>
+</head>
+
+<body>
+    
+    {{>header}}
+    
+    <div class="w-full inline-block mb-14">
+        <div class="container mx-auto px-4">
+            <h3 class="text-blue-600 text-2xl lg:text-4xl w-full lg:w-1/2">The art of medicine consists of amusing the patient while nature
+                cures the disease</h3>
+            <div class="flex flex-wrap -mx-4 mt-8">
+                <div class="w-full md:w-1/2 px-4 pb-6">
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nobis soluta consequuntur neque quia
+                        unde.
+                        Optio impedit beatae quod labore dolor eveniet id. Molestiae dolore quasi at inventore atque
+                        laborum
+                        recusandae nostrum esse, hic consequuntur dolorem ratione praesentium commodi et sint quia
+                        repellendus dolorum
+                        enim voluptate reiciendis nesciunt. Dolorum quisquam consectetur, esse corporis dignissimos quo
+                        quae, ad
+                        aperiam pariatur magnam error ab veniam hic reiciendis voluptate, architecto nam soluta culpa
+                        rem? Odio, sed
+                        animi? Iusto cumque ab labore deserunt quos obcaecati mollitia nesciunt consequuntur quo id.
+                        Suscipit
+                        praesentium, facere nulla ducimus cum error ipsa delectus doloribus dignissimos ad quae, ea fuga
+                        dolore
+                        veritatis. Quos accusantium expedita excepturi, eos molestias animi hic laborum at non adipisci
+                        sequi mollitia, sunt
+                        a dicta distinctio quas. Repudiandae, aut. Repudiandae ex in aperiam nobis quibusdam suscipit
+                        hic
+                        consequuntur, assumenda, mollitia quisquam modi ut. Est, iure possimus totam ut aperiam
+                        distinctio velit aliquam
+                        corporis neque natus minus voluptatum cumque ipsa sed necessitatibus sapiente unde qui, delectus
+                        adipisci
+                        accusamus nostrum perferendis inventore deleniti. Vitae quas cupiditate ab, necessitatibus
+                        magni, placeat
+                        quibusdam et harum sed eos officia fugit labore dolores ipsa soluta hic sunt expedita nihil
+                        dolore officiis.
+                        Repudiandae pariatur labore eligendi, at quos debitis error numquam impedit natus.</p>
+                </div>
+                <div class="w-full md:w-1/2 px-4">
+                    <img class="w-full" src="https://media.istockphoto.com/photos/portrait-of-male-doctor-in-white-coat-and-stethoscope-standing-in-picture-id1327024466?b=1&k=20&m=1327024466&s=170667a&w=0&h=vcw4Exhv4pkR8fMVLNXhNESaKq1HbYwJ1iElLlQBxI0="
+                        alt="">
+                </div>
+
+            </div>
+        </div>
+    </div>
+    {{>testimonials}}
+
+    {{>footer}}
+
+    
+
+
+
+
+
+</body>
+
+</html>

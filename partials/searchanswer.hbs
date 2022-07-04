@@ -1,0 +1,30 @@
+<div class="searchbar-container px-4"></div>
+<script>
+    ANSWERS.init({
+        apiKey: "sandbox-c60cbe94e016d1e3c9e6939885a56b0c",
+        experienceKey: "healthcare-professional",
+        businessId: "3145037",
+        experienceVersion: "STAGING",
+        onReady: function () {
+
+            this.addComponent("SearchBar", {
+                container: ".searchbar-container",
+                allowEmptySearch: false,
+                name: "search-bar", //Must be unique for every search bar on the same page
+                redirectUrl: "search.html",
+                placeholderText: "Search...",
+                geolocationOptions: {
+                    timeout: 500,
+                    maximumAge: 300000,
+                    enableHighAccuracy: false
+                },
+                placeholderText: "Enter doctor name or hospital",
+                geolocationTimeoutAlert: {
+                    enabled: true,
+                    message: "We are unable to determine your location"
+                }
+            });  
+        }
+    });
+</script>
+

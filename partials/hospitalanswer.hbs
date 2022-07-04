@@ -1,0 +1,385 @@
+<div class="w-full inline-block py-5 relative z-20">
+  <div class="container mx-auto px-4">
+    <div class="flex flex-row-reverse -mx-4 justify-between relative">
+      <div class="searchbar-container"></div>
+      <div class="navigation-container"></div>
+    </div>
+  </div>
+</div>
+<div class="w-full inline-block py-5 relative">
+  <div class="container mx-auto px-4">
+    <div class="answers">
+      <div class="map-container"></div>
+      <div id="map-info"><h1>Map Info</h1></div>
+      <div class="directanswer-container"></div>
+      <div class="sort-options-container"></div>
+    </div>
+    <div class="filters-and-results-layout flex flex-wrap">
+      <div class="w-1/4">
+        <div class="facets-container"></div>
+        <div class="sortoptions-container"></div>
+      </div>
+      <div class="w-3/4">
+        <div class="vertical-container"></div>
+        <div class="pagination-container"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="locationbias-container"></div>
+
+<script>
+
+/*Infowindow code ends here*/
+
+  ANSWERS.init({
+    apiKey: "sandbox-c60cbe94e016d1e3c9e6939885a56b0c",
+    experienceKey: "healthcare-professional",
+    businessId: "3145037",
+    experienceVersion: "STAGING",
+    verticalKey: "healthcare_facilities",
+
+
+
+    verticalPages: [
+      {
+        label: "All",
+        url: "search.html",
+        isFirst: true,
+        isActive: false,
+        hideInNavigation: false,
+        target: "_self",
+      },
+      {
+        label: "Hospital",
+        url: "hospitallisting.html",
+        verticalKey: "faqs",
+        icon: "pin",
+        // iconUrl: "",
+        isFirst: false,
+        isActive: true,
+        hideInNavigation: false,
+        target: "_blank",
+      },
+      {
+        label: "Doctor",
+        url: "doctorlisting.html",
+        verticalKey: "healthcare_professionals",
+        icon: "support",
+        // iconUrl: "",
+        isFirst: false,
+        isActive: false,
+        hideInNavigation: false,
+        target: "_blank",
+      },
+      //verticals for events
+      {
+        label: "Jobs",
+        url: "jobslisting.html",
+        verticalKey: "events",
+        icon: "support",
+        // iconUrl: "",
+        isFirst: false,
+        isActive: false,
+        hideInNavigation: false,
+        target: "_blank",
+      },
+      //verticals for jobs
+      {
+        label: "Faq's",
+        url: "faqlisting.html",
+        verticalKey: "jobs",
+        icon: "support",
+        // iconUrl: "",
+        isFirst: false,
+        isActive: false,
+        hideInNavigation: false,
+        target: "_blank",
+      },
+      //verticals for products
+      {
+        label: "Events",
+        url: "eventlisting.html",
+        verticalKey: "products",
+        icon: "support",
+        // iconUrl: "",
+        isFirst: false,
+        isActive: false,
+        hideInNavigation: false,
+        target: "_blank",
+      }
+
+
+    ],
+
+    search: {
+      verticalKey: "healthcare_facilities",
+      defaultInitialSearch: "doctors ",
+      limit: 10
+    },
+    onReady: function () {
+
+
+
+
+
+
+
+      // init components
+      this.addComponent("SearchBar", {
+        container: ".searchbar-container",
+        allowEmptySearch: true,
+        verticalKey: "healthcare_facilities",
+        // searchText: "Search",
+        // query: "Peaceful Coffee",
+        // filter: {
+        //     name: {
+        //         $eq: "Peaceful Coffee"
+        //     }
+        // },
+
+        searchParameters: {
+          // List of fields to query for
+          sectioned: true,
+          fields: [
+            {
+              fieldId: "builtin.location",
+              entityTypeId: "location"
+            },
+            {
+              fieldId: "name",
+              entityTypeId: "location"
+            }
+          ]
+        },
+
+
+
+
+
+
+        geolocationOptions: {
+          timeout: 500,
+          maximumAge: 300000,
+          enableHighAccuracy: false
+        },
+        placeholderText: "Search for hospitals",
+        geolocationTimeoutAlert: {
+          enabled: true,
+          message: "We are unable to determine your location"
+        }
+
+
+
+
+
+      });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      this.addComponent("Navigation", {
+        container: ".navigation-container",
+      });
+
+      ANSWERS.addComponent('Map', {
+        container: '.map-container',
+        mapProvider: 'mapBox',
+        apiKey: 'pk.eyJ1IjoieWV4dCIsImEiOiJqNzVybUhnIn0.hTOO5A1yqfpN42-_z_GuLw',
+        onPinClick: function (entity) {
+          var name =entity.name; 
+          var line =entity.address.line1; 
+          var city =entity.address.city; 
+          alert(name);
+          $("#map-info").append(name+','+line+','+city);
+         
+         
+
+        },
+        onPinMouseOver: function (entity) { },
+        onPinMouseOut: function (entity) { },
+        onLoaded: function () { console.log("Loaded JS") },
+      });
+
+      this.addComponent("DirectAnswer", {
+        container: ".directanswer-container",
+        viewDetailsText: "View Details!",
+
+        transformData: (data) => {
+          //data has fieldName, fieldType, value
+          return {
+            ...data,
+            answer: {
+              ...data.answer,
+              value: formatDirectAnswer(data.answer.fieldName, data.answer.fieldType, data.answer.value, data.answer.value.line1, data.answer.value.region, data.answer.value.postalCode, data.answer.value.countryCode, data.answer.value.city, data.answer.slug)
+
+              // console.log(data.answer.value.line1),
+              // console.log(data.answer.value.region),
+              // console.log(data.answer.value.postalCode),
+
+              // document.write(data.answer.value.line1),
+              // document.write(data.answer.value.region),
+              // document.write(data.answer.value.postalCode),
+
+
+              // $("#demo").innerHTML = data.answer.value.line1 ,
+              // var a = data.answer.value.postalCode;
+
+
+
+            }
+          };
+        },
+      });
+
+      this.addComponent("Facets", {
+        container: ".facets-container",
+        verticalKey: "healthcare_facilities",
+        searchOnChange: true,
+        searchable: true
+      });
+
+
+
+      this.addComponent("VerticalResults", {
+        container: ".vertical-container",
+
+        verticalKey: "healthcare_facilities",
+        card: {
+          cardType: "Standard",
+          dataMappings: {
+            title: (item) => item.name,
+
+
+            subtitle: (item) => "<span style='color:blue; font-size:16px;'>" + "Rating:-" + "</span>" + item.c_rating + "<br>" +
+
+              "<span style='color:blue; font-size:16px;'>" + "Address:-" + "</span>" + item.address.line1 + "<br>"
+              + item.address.city + "<br>" + item.address.region + " " + item.address.postalCode + "<br>" +
+
+
+
+              "<span style='color:blue; font-size:16px;'>" + "Phone:-" + "</span>" + item.mainPhone + "<br>" + "<br>" + "<p style='color:blue; font-size:16px;'>" + "Details" + "</p>",
+
+
+            // subtitle: (item) => item.c_rating + "<br>" + item.address.line1 + "<br>" + item.address.city + "<br>"
+            //   + item.address.region + item.address.postalCode +
+            //   "<br>" + item.mainPhone,
+
+            image: (item) =>
+              item.photoGallery ? item.photoGallery[0].image.url : null,
+            url: (item) => item.slug
+          },
+          callsToAction: [
+            {
+              label: "Get Directions",
+              icon: "directions",
+              url: (item) => 'https://www.google.com/maps/dir/?api=1&destination=' + `${item.address.line1}`,
+              analyticsEventType: "GET_DIRECTIONS",
+              target: "_self"
+            },
+            {
+              label: "Call",
+              icon: "phone",
+              url: (item) => `tel:${item.mainPhone}`,
+              analyticsEventType: "TAP_TO_CALL"
+            }
+          ]
+        },
+        noResults: {
+          displayAllResults: true
+        },
+
+        // template: "this is a pagination demo"
+      });
+
+      this.addComponent("Pagination", {
+        // Required, the selector for the container element where the component will be injected
+        container: ".pagination-container",
+        showFirstAndLastButton: true,
+        pageLabel: "",
+        maxVisiblePagesDesktop: 1,
+        //maxVisiblePagesMobile: 3,
+        pinFirstAndLastPage: false,
+
+        onPaginate: function (newPageNumber, oldPageNumber, totalPages) {
+          console.log(
+            "I'm going from " +
+            oldPageNumber +
+            " to " +
+            newPageNumber +
+            " and there are " +
+            totalPages +
+            " pages."
+          );
+        }
+      });
+
+      this.addComponent("LocationBias", {
+        container: ".locationbias-container",
+      });
+
+    }
+  });
+</script>
+<script>
+
+
+
+  // var output = data.answer.value.line1;
+  // console.log(output);
+
+
+  function formatDirectAnswer(fieldName, fieldType, value, line1, region, postalCode, countryCode, city, slug) {
+    if (fieldType == "address") {
+      console.log(slug);
+      var newFilter = (line1 + '<br>' + region + ' ' + city + '<br>' + countryCode + '<br>' + postalCode);
+      //console.log(slug);
+      return newFilter;
+      //return region;
+      //return postalCode;
+    }
+
+
+    return value;
+  }
+</script>
+<script>
+    function formatDirectAnswer(fieldName, fieldType, value, line1, region, postalCode, countryCode, city, slug, question, answer) {
+        if (fieldType == "address") {
+            var newFilter = (line1 + '<br>' + region + ' ' + city + '<br>' + countryCode + '<br>' + postalCode);
+            return newFilter;
+
+        }
+
+        else if (fieldName == "") {
+            fieldName = answer
+            // var answer = (line1 + '<br>' + region + ' ' + city + '<br>' + countryCode + '<br>' + postalCode);
+            return answer;
+        }
+
+
+        else if (fieldType == "c_related1") {
+
+            var Filter = (line1 + '<br>' + region + ' ' + city + '<br>' + countryCode + '<br>' + postalCode);
+            return Filter;
+        }
+
+
+        else {
+            return value;
+        }
+    }
+</script>

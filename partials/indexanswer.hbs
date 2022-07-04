@@ -1,0 +1,394 @@
+<div class="w-full inline-block py-5 relative">
+    <div class="container mx-auto px-4">
+        <div class="flex flex-row -mx-4 justify-between relative">
+            <div class="navigation-container px-4"></div>
+            <div class="searchbar-container px-4 z-10"></div>
+        </div>
+    </div>
+</div>
+<div class="w-full inline-block py-5 relative">
+    <div class="container mx-auto px-4">
+        <div class="answers-layout">
+            <div class="spellcheck-container"></div>
+            <div class="map-container"></div>
+            <div class="directanswer-container"></div>
+            <div class="universal-container"></div>
+            <div class="question-submission-container"></div>
+            <div class="locationbias-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    ANSWERS.init({
+        apiKey: "sandbox-c60cbe94e016d1e3c9e6939885a56b0c",
+        experienceKey: "healthcare-professional",
+        businessId: "3145037",
+        experienceVersion: "STAGING",
+
+
+        verticalPages: [
+            {
+                label: "All",
+                url: "search.html",
+                isFirst: true,
+                isActive: true,
+                hideInNavigation: false,
+                target: "_self",
+            },
+            {
+                label: "Hospital",
+                url: "hospitallisting.html",
+                verticalKey: "healthcare_facilities",
+                icon: "pin",
+                // iconUrl: "",
+                isFirst: false,
+                isActive: false,
+                hideInNavigation: false,
+                target: "_blank",
+            },
+            {
+                label: "Doctors",
+                url: "doctorlisting.html",
+                verticalKey: "healthcare_professionals",
+                icon: "support",
+                // iconUrl: "",
+                isFirst: false,
+                isActive: false,
+                hideInNavigation: false,
+                target: "_blank",
+            },
+            //verticals for events
+            {
+                label: "Jobs",
+                url: "joblisting.html",
+                verticalKey: "jobs",
+                icon: "support",
+                // iconUrl: "",
+                isFirst: false,
+                isActive: false,
+                hideInNavigation: false,
+                target: "_blank",
+            },
+            //verticals for jobs
+            {
+                label: "Faq's",
+                url: "faqlisting.html",
+                verticalKey: "faqs",
+                icon: "support",
+                // iconUrl: "",
+                isFirst: false,
+                isActive: false,
+                hideInNavigation: false,
+                target: "_blank",
+            },
+            //verticals for products
+            {
+                label: "Events",
+                url: "eventlisting.html",
+                verticalKey: "events",
+                icon: "support",
+                // iconUrl: "",
+                isFirst: false,
+                isActive: false,
+                hideInNavigation: false,
+                target: "_blank",
+            }
+
+
+        ],
+
+        onReady: function () {
+
+            this.addComponent("SearchBar", {
+                container: ".searchbar-container",
+                allowEmptySearch: false,
+                geolocationOptions: {
+                    timeout: 500,
+                    maximumAge: 300000,
+                    enableHighAccuracy: false
+                },
+                placeholderText: "Enter doctor name or hospital",
+                geolocationTimeoutAlert: {
+                    enabled: true,
+                    message: "We are unable to determine your location"
+                }
+            });
+
+            this.addComponent("Navigation", {
+                container: ".navigation-container",
+            });
+
+            this.addComponent("SpellCheck", {
+                container: ".spellcheck-container",
+                suggestionHelpText: "Are you sure you didn't mean: ",
+            });
+
+
+            ANSWERS.addComponent('QASubmission', {
+                container: ".question-submission-container",
+                entityId: 'org-1',
+                privacyPolicyUrl: 'https://mybiz.com/policy',
+            })
+
+            this.addComponent("Map", {
+                container: ".map-container",
+                mapProvider: "mapbox",
+                height: "100%",
+                width: "100%",
+                showEmptyMap: false,
+                verticalKey: "locations",
+                apiKey:
+                    "pk.eyJ1IjoieWV4dCIsImEiOiJqNzVybUhnIn0.hTOO5A1yqfpN42-_z_GuLw"
+
+            });
+
+            ANSWERS.addComponent('Facets', {
+                container: '.facets',
+                verticalKey: 'jobs',
+                searchOnChange: true,
+                showCount: false,
+                showMoreLimit: 2,
+                showMoreLabel: 'More',
+                showLessLabel: 'Less'
+            });
+
+            this.addComponent("DirectAnswer", {
+                container: ".directanswer-container",
+                viewDetailsText: "View Details!",
+
+
+
+
+
+
+
+
+
+
+                transformData: (data) => {
+                    //data has fieldName, fieldType, value
+
+                    return {
+                        ...data,
+                        answer: {
+                            ...data.answer,
+                            value: formatDirectAnswer(data.answer.fieldName,
+                                data.answer.fieldType,
+                                data.answer.value,
+                                data.answer.value.line1,
+                                data.answer.value.region,
+                                data.answer.value.postalCode,
+                                data.answer.value.countryCode,
+                                data.answer.value.city,
+                                data.answer.slug,
+                                data.answer.entity_reference,
+                                data.answer.value,
+                                data.answer.value.entityId,
+                                console.log(data.answer.value.entityId),
+
+
+                            )
+
+
+
+
+                        }
+                    };
+                },
+
+
+            });
+
+
+
+            this.addComponent("UniversalResults", {
+
+
+                container: ".universal-container",
+                config: {
+                    //healthcare facilities
+                    healthcare_facilities: {
+                        icon: "office",
+                        title: "hospitals",
+                        card: {
+                            cardType: "Accordion",
+                            dataMappings: {
+                                title: (item) => item.name,
+                                details: (item) => item.answer,
+                                url: "#"
+                            },
+                            callsToAction: [
+                                {
+                                    label: "Learn More",
+                                    icon: "",
+                                    url: "#",
+                                    analyticsEventType: "CTA_CLICK",
+                                    target: "_self"
+                                }
+                            ]
+                        }
+                    },
+
+
+
+                    //health professionals
+                    healthcare_professionals: {
+                        icon: "person",
+                        title: "Doctors",
+                        card: {
+                            cardType: "Standard",
+                            dataMappings: {
+                                title: (item) => item.name + "<br>",
+                                subtitle: (item) => "<span style='color:blue; font-size:16px;'>" + "Experience:-" + "</span>" + item.c_experience + "<br>" +
+
+                                    "<span style='color:blue; font-size:16px;'>" + "Known Language:-" + "</span>" + item.languages + "<br>" +
+
+                                    "<span style='color:blue; font-size:16px;'>" + "Phone:-" + "</span>" + item.mainPhone + "<br>" + "<br>" + "<p style='color:blue; font-size:16px;'>" + "Details" + "</p>",
+
+
+                                image: (item) =>
+                                    item.photoGallery ? item.photoGallery[0].image.url : null,
+                                url: (item) => item.slug
+                            },
+                            callsToAction: [
+                                {
+                                    label: "Get Directions",
+                                    icon: "directions",
+                                    url: (item) => 'https://www.google.com/maps/dir/?api=1&destination=' + `${item.address.line1}`,
+                                    analyticsEventType: "GET_DIRECTIONS",
+                                    target: "_blank"
+                                },
+                                {
+                                    label: "Call",
+                                    icon: "phone",
+                                    url: (item) => `tel:${item.mainPhone}`,
+                                    analyticsEventType: "TAP_TO_CALL"
+                                }
+                            ]
+                        },
+                        appliedFilters: {
+                            show: true,
+                            showFieldNames: true,
+                            hiddenFields: ["builtin.entityType"],
+                            delimiter: "|",
+                            labelText: "Filters applied to this search:",
+                            removableLabelText: "Remove this filter"
+                        }
+                    },
+                    //faqs
+                    faqs: {
+                        icon: "support",
+                        title: "FAQs",
+                        card: {
+                            cardType: "Accordion",
+                            dataMappings: {
+                                title: (item) => item.name,
+                                details: (item) => item.answer,
+                                url: (item) => item.slug
+                            },
+                            callsToAction: [
+                                {
+                                    label: "Learn More",
+                                    icon: "",
+                                    url: (item) => `${item.slug}`,
+                                    analyticsEventType: "CTA_CLICK",
+                                    target: "_self"
+                                }
+                            ]
+                        }
+                    },
+                    //jobs
+                    jobs: {
+                        icon: "briefcase",
+                        card: {
+                            cardType: "Standard",
+                            dataMappings: {
+                                title: (item) => item.name,
+                                subtitle: (item) => `Date Posted: ${item.datePosted} ` + "<br>" + `Valid Through: ${item.validThrough}` + "<br>" + `Employment Type: ${item.emoloymentType}` + "<br>" + `Remote Work: ${item.workRemote}`,
+                                details: (item) => item.description,
+                                url: (item) => item.slug
+                            },
+                            callsToAction: [
+                                {
+                                    label: "Learn More",
+                                    icon: "info",
+                                    url: "#",
+                                    analyticsEventType: "CTA_CLICK",
+                                    target: "_self"
+                                }
+                            ]
+                        }
+                    },
+                    //jobs
+                    events: {
+                        icon: "star",
+                        card: {
+                            cardType: "Standard",
+                            dataMappings: {
+                                title: (item) => item.name,
+                                subtitle: (item) => `Performers: ${item.performers} ` + "<br>" + `Age Limit: ${item.ageRange.minValue}` + "<br>" + `Ticket: ${item.isTicketedEvent}` + "<br>" + `Event Date: ${item.c_eventdate}`,
+                                // subtitle: (item) => `Valid Through: ${item.validThrough}`,
+                                // subtitle: (item) => `Employment Type: ${item.emoloymentType}`,
+                                //  subtitle: (item) => `Remote Work: ${item.workRemote}`,
+                                details: (item) => item.description,
+                                url: (item) => item.slug
+                            },
+                            callsToAction: [
+                                {
+                                    label: "Learn More",
+                                    icon: "info",
+                                    url: "#",
+                                    analyticsEventType: "CTA_CLICK",
+                                    target: "_self"
+                                }
+                            ]
+                        }
+                    }
+
+
+
+
+
+
+
+
+                }
+
+
+
+            });
+            this.addComponent("LocationBias", {
+                container: ".locationbias-container",
+            });
+
+        }
+    });
+</script>
+
+<script>
+    function formatDirectAnswer(fieldName, fieldType, value, line1, region, postalCode, countryCode, city, slug, question, answer) {
+        if (fieldType == "address") {
+            var newFilter = (line1 + '<br>' + region + ' ' + city + '<br>' + countryCode + '<br>' + postalCode);
+            return newFilter;
+
+        }
+
+        else if (fieldName == "") {
+            fieldName = answer
+            // var answer = (line1 + '<br>' + region + ' ' + city + '<br>' + countryCode + '<br>' + postalCode);
+            return answer;
+        }
+
+
+        else if (fieldType == "c_related1") {
+
+            var Filter = (line1 + '<br>' + region + ' ' + city + '<br>' + countryCode + '<br>' + postalCode);
+            return Filter;
+        }
+
+
+        else {
+            return value;
+        }
+    }
+</script>
